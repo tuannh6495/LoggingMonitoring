@@ -61,3 +61,14 @@ services:
       - 16686:16686
     networks:
       - logging-net
+  
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    command: ["--config=/etc/otel-collector-config.yml"]
+    ports:
+      - 4317:4317 # OTLP gRPC endpoint
+      - 55681:55681 # OTLP HTTP endpoint (optional)
+    volumes:
+      - ./otel-collector-config.yml:/etc/otel-collector-config.yml
+    networks:
+      - logging-net

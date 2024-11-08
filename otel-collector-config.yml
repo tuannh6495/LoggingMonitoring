@@ -1,0 +1,29 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+exporters:
+  logging:
+    loglevel: debug
+  prometheus:
+    endpoint: "0.0.0.0:8888" # Dùng cho Prometheus để scrape metrics
+  jaeger:
+    endpoint: jaeger:14250
+    tls:
+      insecure: true
+
+  # Optional: Gửi logs đến Elasticsearch hoặc Prometheus (tùy chọn)
+  elasticsearch:
+    endpoints: ["http://elasticsearch:9200"]
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [jaeger, logging]
+
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheus, logging]
